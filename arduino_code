@@ -1,45 +1,55 @@
-// Motor relay pins (using relay modules instead of motor drivers)
-#define relayA1 6   // Relay A forward
-#define relayA2 7   // Relay A backward
-#define relayB1 8   // Relay B forward
-#define relayB2 9   // Relay B backward
+// Motor control pins (for H-Bridge motor driver)
+#define motorA1 6   // Motor A direction pin
+#define motorA2 7   // Motor A direction pin
+#define motorB1 8   // Motor B direction pin
+#define motorB2 9   // Motor B direction pin
+#define enableA 5   // Motor A enable pin (PWM control)
+#define enableB 3   // Motor B enable pin (PWM control)
 
 // Light sensor pins
 #define lightSensorPinA A0
 #define lightSensorPinB A5
 
 void setup() {
-  // Motor relay pins as OUTPUT
-  pinMode(relayA1, OUTPUT);
-  pinMode(relayA2, OUTPUT);
-  pinMode(relayB1, OUTPUT);
-  pinMode(relayB2, OUTPUT);
+  // Motor control pins as OUTPUT
+  pinMode(motorA1, OUTPUT);
+  pinMode(motorA2, OUTPUT);
+  pinMode(motorB1, OUTPUT);
+  pinMode(motorB2, OUTPUT);
+  pinMode(enableA, OUTPUT);
+  pinMode(enableB, OUTPUT);
 
   // Light sensor pins as INPUT
   pinMode(lightSensorPinA, INPUT);
   pinMode(lightSensorPinB, INPUT);
 
-  // Set all relays to LOW initially (motors off)
-  digitalWrite(relayA1, LOW);
-  digitalWrite(relayA2, LOW);
-  digitalWrite(relayB1, LOW);
-  digitalWrite(relayB2, LOW);
+  // Set all motors to OFF initially
+  digitalWrite(motorA1, LOW);
+  digitalWrite(motorA2, LOW);
+  digitalWrite(motorB1, LOW);
+  digitalWrite(motorB2, LOW);
+  analogWrite(enableA, 0);  // Motor A off
+  analogWrite(enableB, 0);  // Motor B off
 }
 
 void MoveEast() {
   // Motor A moves forward, Motor B moves backward
-  digitalWrite(relayA1, HIGH);  // Motor A forward
-  digitalWrite(relayA2, LOW);   // Motor A forward
-  digitalWrite(relayB1, LOW);   // Motor B backward
-  digitalWrite(relayB2, HIGH);  // Motor B backward
+  digitalWrite(motorA1, HIGH);  // Motor A forward
+  digitalWrite(motorA2, LOW);   // Motor A forward
+  digitalWrite(motorB1, LOW);   // Motor B backward
+  digitalWrite(motorB2, HIGH);  // Motor B backward
+  analogWrite(enableA, 255);    // Enable motor A at full speed
+  analogWrite(enableB, 255);    // Enable motor B at full speed
 }
 
 void MoveWest() {
   // Motor B moves forward, Motor A moves backward
-  digitalWrite(relayA1, LOW);   // Motor A backward
-  digitalWrite(relayA2, HIGH);  // Motor A backward
-  digitalWrite(relayB1, HIGH);  // Motor B forward
-  digitalWrite(relayB2, LOW);   // Motor B forward
+  digitalWrite(motorA1, LOW);   // Motor A backward
+  digitalWrite(motorA2, HIGH);  // Motor A backward
+  digitalWrite(motorB1, HIGH);  // Motor B forward
+  digitalWrite(motorB2, LOW);   // Motor B forward
+  analogWrite(enableA, 255);    // Enable motor A at full speed
+  analogWrite(enableB, 255);    // Enable motor B at full speed
 }
 
 void loop() {
