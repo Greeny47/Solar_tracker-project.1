@@ -1,0 +1,58 @@
+// Motor relay pins (using relay modules instead of motor drivers)
+#define relayA1 6   // Relay A forward
+#define relayA2 7   // Relay A backward
+#define relayB1 8   // Relay B forward
+#define relayB2 9   // Relay B backward
+
+// Light sensor pins
+#define lightSensorPinA A0
+#define lightSensorPinB A5
+
+void setup() {
+  // Motor relay pins as OUTPUT
+  pinMode(relayA1, OUTPUT);
+  pinMode(relayA2, OUTPUT);
+  pinMode(relayB1, OUTPUT);
+  pinMode(relayB2, OUTPUT);
+
+  // Light sensor pins as INPUT
+  pinMode(lightSensorPinA, INPUT);
+  pinMode(lightSensorPinB, INPUT);
+
+  // Set all relays to LOW initially (motors off)
+  digitalWrite(relayA1, LOW);
+  digitalWrite(relayA2, LOW);
+  digitalWrite(relayB1, LOW);
+  digitalWrite(relayB2, LOW);
+}
+
+void MoveEast() {
+  // Motor A moves forward, Motor B moves backward
+  digitalWrite(relayA1, HIGH);  // Motor A forward
+  digitalWrite(relayA2, LOW);   // Motor A forward
+  digitalWrite(relayB1, LOW);   // Motor B backward
+  digitalWrite(relayB2, HIGH);  // Motor B backward
+}
+
+void MoveWest() {
+  // Motor B moves forward, Motor A moves backward
+  digitalWrite(relayA1, LOW);   // Motor A backward
+  digitalWrite(relayA2, HIGH);  // Motor A backward
+  digitalWrite(relayB1, HIGH);  // Motor B forward
+  digitalWrite(relayB2, LOW);   // Motor B forward
+}
+
+void loop() {
+  // Read light sensor values
+  int lightValueA = analogRead(lightSensorPinA); // reading the light values
+  int lightValueB = analogRead(lightSensorPinB); // reading the light values
+
+  // Compare light sensor values and move accordingly
+  if (lightValueA > lightValueB) {
+    delay(10000);  // Move for 10 seconds
+    MoveEast();    // Move East if sensor A detects more light
+  } else {
+    delay(10000);  // Move for 10 seconds
+    MoveWest();    // Move West if sensor B detects more light
+  }
+}
